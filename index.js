@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB URI
-const uri = process.env.MONGO_URI || "mongodb+srv://homeNest:2EjwCBYxVnCwVH3m@cluster0.cbri3dy.mongodb.net/?appName=Cluster0";
+const uri = process.env.MONGO_URI 
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -31,6 +31,15 @@ async function run() {
 app.get("/all-properties", async (req, res) => {
   const data = await properties.find().toArray();
   res.send(data);
+});
+app.get("/details/:id", async (req, res) => {
+  const {id} = req.params;
+  const result=await properties.findOne({_id:new ObjectId(id)})
+  console.log(id)
+  res.send({
+    success:true,
+    result
+  })
 });
 
 //POST Method
