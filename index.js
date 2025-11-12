@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { verifyTokenMiddleware } = require("./firebaseAuth");
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ async function run() {
   const properties = db.collection("properties");
 //find
 //findOne
-app.get("/all-properties", async (req, res) => {
+app.get("/all-properties",verifyTokenMiddleware, async (req, res) => {
   const data = await properties.find().toArray();
   res.send(data);
 });
@@ -58,21 +59,21 @@ app.post("/all-properties",async(req,res)=>{
 
 
 // My Properties - get by user email
-app.get("/my-properties/:email", async (req, res) => {
+app.get("/my-properties/:email",verifyTokenMiddleware, async (req, res) => {
   const { email } = req.params;
   const data = await properties.find({ postedBy: email }).toArray();
   res.send(data);
 });
 
 // Delete Property
-app.delete("/property/:id", async (req, res) => {
+app.delete("/property/:id",verifyTokenMiddleware, async (req, res) => {
   const { id } = req.params;
   const result = await properties.deleteOne({ _id: new ObjectId(id) });
   res.send({ success: true, result });
 });
 
 // Update property
-app.put("/property/:id", async (req, res) => {
+app.put("/property/:id",verifyTokenMiddleware, async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   const result = await properties.updateOne(
@@ -85,6 +86,35 @@ app.put("/property/:id", async (req, res) => {
   });
 });
 
+
+
+app.post("/reviews", async (req, res) => {
+  const review = req.body;
+  review.propertyId = review.propertyId.toString(); 
+  const result = await db.collection("reviews").insertOne(review);
+  res.send({ success: true, result });
+});
+
+app.get("/reviews/:propertyId", async (req, res) => {
+  const { propertyId } = req.params;
+  const result = await db
+    .collection("reviews")
+    .find({ propertyId: propertyId.toString() }) 
+    .sort({ createdAt: -1 })
+    .toArray();
+  res.send(result);
+});
+
+
+app.get("/my-reviews/:email", async (req, res) => {
+  const { email } = req.params;
+  const reviews = await db
+    .collection("reviews")
+    .find({ reviewerEmail: email })
+    .sort({ createdAt: -1 })
+    .toArray();
+  res.send(reviews);
+});
 
 
     await client.db("admin").command({ ping: 1 });
