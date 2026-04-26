@@ -29,7 +29,7 @@ async function run() {
   const properties = db.collection("properties");
 //find
 //findOne
-app.get("/api/properties", async (req, res) => {
+app.get("/all-properties", async (req, res) => {
   try {
     const { search, sort } = req.query;
 
@@ -53,7 +53,7 @@ app.get("/api/properties", async (req, res) => {
   }
 });
 
-app.get("/api/properties/:id", async (req, res) => {
+app.get("/details/:id", async (req, res) => {
   const {id} = req.params;
   const result=await properties.findOne({_id:new ObjectId(id)})
   console.log(id)
@@ -66,7 +66,7 @@ app.get("/api/properties/:id", async (req, res) => {
 //POST Method
 //insertOne
 //insertMany
-app.post("/api/properties",verifyTokenMiddleware,async(req,res)=>{
+app.post("/all-properties",verifyTokenMiddleware,async(req,res)=>{
   const data1=req.body
   console.log(data1)
     data1.createdAt = new Date();
@@ -80,21 +80,21 @@ app.post("/api/properties",verifyTokenMiddleware,async(req,res)=>{
 
 
 // My Properties - get by user email
-app.get("/api/properties/user/:email",verifyTokenMiddleware, async (req, res) => {
+app.get("/my-properties/:email",verifyTokenMiddleware, async (req, res) => {
   const { email } = req.params;
   const data = await properties.find({ postedBy: email }).toArray();
   res.send(data);
 });
 
 // Delete Property
-app.delete("/api/properties/:id",verifyTokenMiddleware, async (req, res) => {
+app.delete("/property/:id",verifyTokenMiddleware, async (req, res) => {
   const { id } = req.params;
   const result = await properties.deleteOne({ _id: new ObjectId(id) });
   res.send({ success: true, result });
 });
 
 // Update property
-app.put("/api/properties/:id",verifyTokenMiddleware, async (req, res) => {
+app.put("/property/:id",verifyTokenMiddleware, async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
   const result = await properties.updateOne(
@@ -109,14 +109,14 @@ app.put("/api/properties/:id",verifyTokenMiddleware, async (req, res) => {
 
 
 
-app.post("/api/reviews",verifyTokenMiddleware, async (req, res) => {
+app.post("/reviews",verifyTokenMiddleware, async (req, res) => {
   const review = req.body;
   review.propertyId = review.propertyId.toString(); 
   const result = await db.collection("reviews").insertOne(review);
   res.send({ success: true, result });
 });
 
-app.get("/api/reviews/property/:propertyId", async (req, res) => {
+app.get("/reviews/:propertyId", async (req, res) => {
   const { propertyId } = req.params;
   const result = await db
     .collection("reviews")
@@ -127,7 +127,7 @@ app.get("/api/reviews/property/:propertyId", async (req, res) => {
 });
 
 
-app.get("/api/reviews/user/:email",verifyTokenMiddleware, async (req, res) => {
+app.get("/my-reviews/:email",verifyTokenMiddleware, async (req, res) => {
   const { email } = req.params;
   const reviews = await db
     .collection("reviews")
@@ -138,7 +138,7 @@ app.get("/api/reviews/user/:email",verifyTokenMiddleware, async (req, res) => {
 });
 
 
-app.get("/api/properties/featured", async (req, res) => {
+app.get("/featured-properties", async (req, res) => {
   try {
     const data = await db
       .collection("properties")
