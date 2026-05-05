@@ -92,6 +92,7 @@ npm start
 Server will run on:
 
 http://localhost:5000
+https://homenest-server-nine.vercel.app/
 
 ## API Endpoints
 ➤ Get all properties
