@@ -2,7 +2,8 @@
 
 ## Live API Endpoint
 
-VITE_API_URL/
+API_URL: https://homenest-server-nine.vercel.app/
+
 
 ## GitHub Repository
 
