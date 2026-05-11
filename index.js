@@ -11,7 +11,8 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://home-nest-beta.vercel.app/", // তোমার frontend Vercel URL
+    "http://localhost:3000",
+    "https://home-nest-beta.vercel.app", // তোমার frontend Vercel URL
     "https://home-nest-client-coral.vercel.app", // তোমার frontend Vercel URL
   ],
   credentials: true,
