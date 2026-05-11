@@ -2,7 +2,7 @@
 
 ## Live API Endpoint
 
-API_URL: https://homenest-server-nine.vercel.app/
+API_URL: home-nest-server-side-eight.vercel.app/
 
 
 ## GitHub Repository
@@ -93,7 +93,7 @@ npm start
 Server will run on:
 
 http://localhost:5000
-https://homenest-server-nine.vercel.app/
+home-nest-server-side-eight.vercel.app/
 
 ## API Endpoints
 ➤ Get all properties
