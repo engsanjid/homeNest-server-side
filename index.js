@@ -8,7 +8,14 @@ const { verifyTokenMiddleware } = require("./firebaseAuth");
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://home-nest-beta.vercel.app/", // তোমার frontend Vercel URL
+    "https://home-nest-client-coral.vercel.app", // তোমার frontend Vercel URL
+  ],
+  credentials: true,
+}));
 app.use(express.json());
 
 // MongoDB URI

@@ -93,7 +93,7 @@ npm start
 Server will run on:
 
 http://localhost:5000
-home-nest-server-side-eight.vercel.app/
+https:home-nest-server-side-eight.vercel.app/
 
 ## API Endpoints
 ➤ Get all properties
